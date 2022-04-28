@@ -73,7 +73,7 @@ abstract contract ERC721Attachable is ERC721, IERC721Attachable {
 
   function approve(address to, uint256 tokenId) public virtual override(ERC721, IERC721) {
     require(
-      getHostContract(tokenId) == address(0), 
+      getHostContract(tokenId) == address(0),
       "Please detach host first"
     );
 

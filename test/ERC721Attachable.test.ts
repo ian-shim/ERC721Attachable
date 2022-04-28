@@ -129,6 +129,18 @@ describe("ERC721Attachable", async function() {
         '0x01'
       )).to.be.revertedWith("Cannot transfer while host is attached. Please detach host first");
     });
+
+    it('moves with the host token', async function() {
+      await this.contract.connect(this.alice).attachHost(this.id1, this.hostContract.address, this.id2);
+      await this.hostContract.connect(this.bob)['safeTransferFrom(address,address,uint256)'](
+        this.bob.address,
+        this.charlie.address,
+        this.id2
+      );
+      expect(await this.contract.getHostContract(this.id1)).to.eq(this.hostContract.address);
+      expect(await this.contract.getHostTokenId(this.id1)).to.eq(this.id2);
+      expect(await this.contract.ownerOf(this.id1)).to.eq(this.charlie.address);
+    });
   });
 
   describe('with detached token', async function() {
